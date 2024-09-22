@@ -7,8 +7,8 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
+WORK_MIN = 1
+SHORT_BREAK_MIN = 1
 LONG_BREAK_MIN = 20
 REPS = 0
 
@@ -26,7 +26,7 @@ def start_timer():
 
     if REPS % 8 == 0:
         count_down(long_break_sec)
-        label.config(text="Long Break", fg=RED)
+        label.config(text="Long Break", fg=PINK)
     if REPS % 2 == 0:
         count_down(short_break_sec)
         label.config(text="Short Break", fg=RED)
@@ -47,6 +47,11 @@ def count_down(count):
         window.after(1000, count_down, count - 1)
     else:
         start_timer()
+        mark = ""
+        work_sessions = math.floor(REPS/2)
+        for x in range(work_sessions):
+            mark += "✅"
+        check.config(text=mark)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -63,7 +68,7 @@ btn1.grid(column=0, row=2)
 btn2 = Button(text="Reset", bg=GREEN, font=("Courier", 12, "normal"))
 btn2.grid(column=2, row=2)
 
-check = Label(text="✅", font=("Courier", 15, "bold"), bg=YELLOW, fg=GREEN)
+check = Label(font=("Courier", 15, "bold"), bg=YELLOW, fg=GREEN)
 check.grid(column=1, row=3)
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
