@@ -10,11 +10,20 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 
-# ---------------------------- TIMER RESET ------------------------------- # 
+
+# ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
+def start_timer():
+    count_down(25)
 
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+def count_down(count):
+    canvas.itemconfig(timer, text=count)
+    if count > 0:
+        window.after(1000, count_down, count - 1)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -24,7 +33,7 @@ window.config(padx=120, pady=100, bg=YELLOW)
 label = Label(text="Pomodoro Timer", font=("Courier", 20, "bold"), fg=RED, bg=YELLOW)
 label.grid(column=1, row=0)
 
-btn1 = Button(text="Start", bg=GREEN, font=("Courier", 12, "normal"))
+btn1 = Button(text="Start", bg=GREEN, font=("Courier", 12, "normal"), command=start_timer)
 btn1.grid(column=0, row=2)
 
 btn2 = Button(text="Reset", bg=GREEN, font=("Courier", 12, "normal"))
@@ -36,7 +45,7 @@ label.grid(column=1, row=3)
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 img = PhotoImage(file="tomato.png")
 canvas.create_image(100, 112, image=img)
-canvas.create_text(100, 130, text="00:00", fill="yellow", font=(FONT_NAME, 28, "bold"))
+timer = canvas.create_text(100, 130, text="00:25", fill="yellow", font=(FONT_NAME, 28, "bold"))
 canvas.grid(column=1, row=1)
 
 window.mainloop()
