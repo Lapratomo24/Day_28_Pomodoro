@@ -7,15 +7,24 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 1
-SHORT_BREAK_MIN = 1
+WORK_MIN = 25
+SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
+TIMER = ""
 
 
 # ---------------------------- TIMER RESET ------------------------------- #
+def reset_timer():
+    window.after_cancel(TIMER)
+    label.config(text="Pomodoro Timer", fg=RED)
+    canvas.itemconfig(time, text="00:00")
+    check.config(text="")
+    global REPS
+    REPS = 0
 
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
+
+# ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
     global REPS
     REPS += 1
@@ -42,13 +51,14 @@ def count_down(count):
     if count_sec < 10:
         count_sec = f"0{count_sec}"
 
-    canvas.itemconfig(timer, text=f"{count_min}:{count_sec}")
+    canvas.itemconfig(time, text=f"{count_min}:{count_sec}")
     if count > 0:
-        window.after(1000, count_down, count - 1)
+        global TIMER
+        TIMER = window.after(1000, count_down, count - 1)
     else:
         start_timer()
         mark = ""
-        work_sessions = math.floor(REPS/2)
+        work_sessions = math.floor(REPS / 2)
         for x in range(work_sessions):
             mark += "✅"
         check.config(text=mark)
@@ -65,7 +75,7 @@ label.grid(column=1, row=0)
 btn1 = Button(text="Start", bg=GREEN, font=("Courier", 12, "normal"), command=start_timer)
 btn1.grid(column=0, row=2)
 
-btn2 = Button(text="Reset", bg=GREEN, font=("Courier", 12, "normal"))
+btn2 = Button(text="Reset", bg=GREEN, font=("Courier", 12, "normal"), command=reset_timer)
 btn2.grid(column=2, row=2)
 
 check = Label(font=("Courier", 15, "bold"), bg=YELLOW, fg=GREEN)
@@ -74,7 +84,7 @@ check.grid(column=1, row=3)
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 img = PhotoImage(file="tomato.png")
 canvas.create_image(100, 112, image=img)
-timer = canvas.create_text(100, 130, text="25:00", fill="yellow", font=(FONT_NAME, 28, "bold"))
+time = canvas.create_text(100, 130, text="25:00", fill="yellow", font=(FONT_NAME, 28, "bold"))
 canvas.grid(column=1, row=1)
 
 window.mainloop()
